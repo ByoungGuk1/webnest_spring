@@ -6,6 +6,7 @@ import com.app.webnest.domain.vo.QuizVO;
 import com.app.webnest.domain.vo.UserVO;
 import com.app.webnest.service.SearchService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,11 +18,13 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/search")
+@Slf4j
 public class SearchApi {
     private final SearchService searchService;
 
     @GetMapping
     public ResponseEntity<ApiResponseDTO> searchResult(@RequestParam("search") String query) {
+
         Map<String, Object> result = new HashMap<>();
         List<PostSearchDTO> openPosts = searchService.getOpenPostBySearchQuery(query);
         List<PostSearchDTO> questionPosts = searchService.getQuestionPostBySearchQuery(query);

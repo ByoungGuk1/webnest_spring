@@ -9,7 +9,6 @@
         <!-- VO -->
         <typeAlias type="com.app.webnest.domain.vo.BanVO" alias="BanVO" />
         <typeAlias type="com.app.webnest.domain.vo.ChatMessageVO" alias="ChatMessageVO" />
-        <typeAlias type="com.app.webnest.domain.vo.ChatRoomVO" alias="ChatRoomVO" />
         <typeAlias type="com.app.webnest.domain.vo.CommentLikeVO" alias="CommentLikeVO" />
         <typeAlias type="com.app.webnest.domain.vo.CommentNotificationVO" alias="CommentNotificationVO" />
         <typeAlias type="com.app.webnest.domain.vo.CommentVO" alias="CommentVO" />

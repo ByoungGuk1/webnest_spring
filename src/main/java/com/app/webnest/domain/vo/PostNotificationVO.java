@@ -11,6 +11,6 @@ public class PostNotificationVO {
     private Long userId;
     private Long postId;
     private Date postNotificationCreateAt;
-    private boolean postNotificationIsRead;
+    private Integer postNotificationIsRead;
     private String postNotificationContent; // erd수정
 }

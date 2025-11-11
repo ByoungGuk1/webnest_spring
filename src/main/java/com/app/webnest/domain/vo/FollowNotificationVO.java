@@ -10,6 +10,6 @@ public class FollowNotificationVO {
     private Long id;
     private Long followerId; // erd고치기
     private Long userId;
-    private boolean followNotificationIsRead;
+    private Integer followNotificationIsRead;
     private Date followNotificationCreateAt;
 }
