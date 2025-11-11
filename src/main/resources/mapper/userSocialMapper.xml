@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.app.webnest.mapper.UserSocialMapper">
+  <insert id="insert" parameterType="UserSocialVO">
+    INSERT INTO TBL_USER_SOCIAL
+    VALUES(SEQ_USER_SOCIAL.NEXTVAL, #{userSocialProviderId}, #{userSocialProvider}, #{userId})
+  </insert>
+
+  <select id="selectAll" parameterType="Long" resultType="String">
+    SELECT USER_SOCIAL_PROVIDER
+    FROM TBL_USER_SOCIAL
+    WHERE USER_ID = #{userId}
+  </select>
+
+    <select id="selectUserIdByProvider" parameterType="map" resultType="Long">
+        SELECT USER_ID
+        FROM TBL_USER_SOCIAL
+        WHERE USER_SOCIAL_PROVIDER = #{provider}
+        AND USER_SOCIAL_PROVIDER_ID = #{providerId}
+    </select>
+
+    <delete id="deleteByUserId" parameterType="Long">
+        DELETE FROM TBL_USER_SOCIAL
+        WHERE USER_ID = #{userId}
+    </delete>
+
+</mapper>
