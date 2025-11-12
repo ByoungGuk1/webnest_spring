@@ -11,4 +11,6 @@ public class SubcommentDTO {
     private Long userId;
     private Long commentId;
     private Date subcommentCreateAt;
+    private String subcommentDescription;
+    private String userNickname;
 }

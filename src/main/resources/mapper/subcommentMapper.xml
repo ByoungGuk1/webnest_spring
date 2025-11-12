@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.app.webnest.mapper.SubcommentMapper">
+
+    <select id="selectSubcomment" parameterType="Long" resultType="SubcommentDTO" >
+        SELECT COUNT(COMMENT_ID)
+        FROM TBL_COMMENT_LIKE
+        WHERE COMMENT_ID= #{commentId}
+    </select>
+</mapper>
+
+
+        <!--&lt;!&ndash; 게시글의 대댓글 조회 &ndash;&gt;-->
+        <!--<select id="selectReply" parameterType="Long" resultType="ReplyDTO">-->
+        <!--    SELECT-->
+        <!--    TBR.ID, TBR.REPLY_TEST_CONTENT, TBR.COMMENT_TEST_ID, TBR.MEMBER_TEST_ID,-->
+        <!--    TBM.MEMBER_TEST_NAME-->
+        <!--    FROM TBL_REPLY_TEST TBR-->
+        <!--    JOIN TBL_MEMBER_TEST TBM-->
+        <!--    ON TBR.MEMBER_TEST_ID = TBM.ID-->
+        <!--    WHERE COMMENT_TEST_ID = #{commentTestId}-->
+        <!--</select>-->
