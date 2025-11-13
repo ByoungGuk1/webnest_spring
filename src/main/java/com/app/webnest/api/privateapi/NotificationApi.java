@@ -49,12 +49,12 @@ public class NotificationApi {
         notificationService.modifyFollowNotification(id);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponseDTO.of("completed read one follow notification"));
     }
-    
-    @PutMapping("modify-all")
-    public ResponseEntity<ApiResponseDTO> modifyAllNotification(@RequestBody Long receiverUserId){
+
+    @PutMapping("modify-all/{receiverUserId}")
+    public ResponseEntity<ApiResponseDTO> modifyAllNotification(@PathVariable Long receiverUserId){
         notificationService.modifyEveryCommentNotification(receiverUserId);
         notificationService.modifyEveryFollowNotification(receiverUserId);
-        notificationService.removeEveryPostNotification(receiverUserId);
+        notificationService.modifyEveryPostNotification(receiverUserId);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponseDTO.of("complete read all"));
     }
 
@@ -74,8 +74,8 @@ public class NotificationApi {
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponseDTO.of("complete remove follow notification"));
     }
 
-    @DeleteMapping("delete-all")
-    public ResponseEntity<ApiResponseDTO> deleteAllNotification(@RequestBody Long receiverUserId){
+    @DeleteMapping("delete-all/{receiverUserId}")
+    public ResponseEntity<ApiResponseDTO> deleteAllNotification(@PathVariable Long receiverUserId){
         notificationService.removeEveryPostNotification(receiverUserId);
         notificationService.removeEveryFollowNotification(receiverUserId);
         notificationService.removeEveryCommentNotification(receiverUserId);

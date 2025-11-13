@@ -27,8 +27,12 @@ public class ChatMessageApi {
         GameJoinVO gameJoinVO = new GameJoinVO(chatMessageVO);
         String type = chatMessageVO.getChatMessageType();
 
+        boolean alreadyExistUserInRoom = gameJoinService.getGameJoinDTOByGameRoomId(gameJoinVO).isPresent();
+
         if(type.equals("JOIN")){
-            gameJoinService.join(gameJoinVO);
+            if(!alreadyExistUserInRoom){
+                gameJoinService.join(gameJoinVO);
+            }
         }else if(type.equals("LEAVE")){
             gameJoinService.leave(gameJoinVO);
         }else if(type.equals("MESSAGE")){

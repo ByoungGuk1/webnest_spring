@@ -62,17 +62,17 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public void modifyEveryPostNotification(Long receiverUserId) {
-        notificationDAO.modifyPostNotification(receiverUserId);
+        notificationDAO.modifyEveryPostsNotification(receiverUserId);
     }
 
     @Override
     public void modifyEveryFollowNotification(Long receiverUserId) {
-        notificationDAO.modifyFollowNotification(receiverUserId);
+        notificationDAO.modifyEveryFollowNotification(receiverUserId);
     }
 
     @Override
     public void modifyEveryCommentNotification(Long receiverUserId) {
-        notificationDAO.modifyCommentNotification(receiverUserId);
+        notificationDAO.modifyEveryCommentsNotification(receiverUserId);
     }
 
     @Override
@@ -92,16 +92,16 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public void removeEveryPostNotification(Long receiverUserId) {
-        notificationDAO.removePostNotification(receiverUserId);
+        notificationDAO.removeEveryPostsNotification(receiverUserId);
     }
 
     @Override
     public void removeEveryFollowNotification(Long receiverUserId) {
-        notificationDAO.removeFollowNotification(receiverUserId);
+        notificationDAO.removeEveryFollowNotification(receiverUserId);
     }
 
     @Override
     public void removeEveryCommentNotification(Long receiverUserId) {
-        notificationDAO.removeCommentNotification(receiverUserId);
+        notificationDAO.removeEveryCommentsNotification(receiverUserId);
     }
 }

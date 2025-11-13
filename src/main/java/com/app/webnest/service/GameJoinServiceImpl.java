@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -30,4 +31,9 @@ public class GameJoinServiceImpl implements GameJoinService {
     public List<GameJoinDTO> getPlayers(Long gameRoomId) {
         return gameJoinDAO.getPlayers(gameRoomId);
     }
+
+    @Override
+    public Optional<GameJoinVO> getGameJoinDTOByGameRoomId(GameJoinVO gameJoinVO){
+        return gameJoinDAO.findUserInGameRoom(gameJoinVO);
+    };
 }

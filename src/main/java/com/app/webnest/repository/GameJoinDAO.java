@@ -32,4 +32,7 @@ public class GameJoinDAO {
         gameJoinMapper.delete(gameJoinVO);
     }
 
+    public Optional<GameJoinVO> findUserInGameRoom(GameJoinVO gameJoinVO) {
+        return gameJoinMapper.selectGameUserByUserIdAndGameRoom(gameJoinVO);
+    }
 }

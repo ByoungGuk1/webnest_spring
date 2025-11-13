@@ -5,6 +5,7 @@ import com.app.webnest.domain.vo.GameJoinVO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
+import java.util.Optional;
 
 @Mapper
 public interface GameJoinMapper {
@@ -17,4 +18,6 @@ public interface GameJoinMapper {
 
     // 플레이어 게임 종료
     public void delete(GameJoinVO gameJoinVO);
+
+    public Optional<GameJoinVO> selectGameUserByUserIdAndGameRoom(GameJoinVO gameJoinVO);
 }

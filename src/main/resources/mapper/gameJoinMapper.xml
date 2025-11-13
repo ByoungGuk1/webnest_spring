@@ -26,4 +26,9 @@
             GAME_ROOM_ID = #{gameRoomId}
     </delete>
 
+    <select id="selectGameUserByUserIdAndGameRoom" parameterType="GameJoinVO" resultType="GameJoinVO">
+        SELECT ID, GAME_JOIN_IS_HOST, USER_ID ,GAME_ROOM_ID
+        FROM TBL_GAME_JOIN
+        WHERE USER_ID = #{userId} AND #{gameRoomId}
+    </select>
 </mapper>
