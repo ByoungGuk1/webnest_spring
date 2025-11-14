@@ -19,6 +19,9 @@ public interface UserService {
   // 회원 정보 조회
   public UserResponseDTO getUserById(Long id);
 
+  // 마이페이지 정보 조회
+  public Map<String, Object> getMyDatas(Long id);
+
   // 이메일 중복 확인
   public boolean existsByUserEmail(String userEmail);
 

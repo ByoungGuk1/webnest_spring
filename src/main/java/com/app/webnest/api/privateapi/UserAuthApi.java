@@ -13,6 +13,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/private/users")
 @RequiredArgsConstructor
@@ -29,6 +31,14 @@ public class UserAuthApi {
     return ResponseEntity.status(HttpStatus.OK)
         .body(ApiResponseDTO.of("내 정보 조회 성공", currentUser));
   }
+
+  @GetMapping("/my-page")
+  public ResponseEntity<ApiResponseDTO> mypage(Authentication authentication) {
+      Long myId = getUserByToken(authentication).getId();
+      Map<String, Object> myDatas = userService.getMyDatas(myId);
+      return ResponseEntity.status(HttpStatus.OK).body(ApiResponseDTO.of("마이 페이지", myDatas));
+  }
+
 
   @PutMapping("/modify")
   public ResponseEntity<ApiResponseDTO> modify(Authentication authentication, @RequestBody UserVO userVO) {

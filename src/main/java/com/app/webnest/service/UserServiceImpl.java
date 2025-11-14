@@ -1,12 +1,13 @@
 package com.app.webnest.service;
 
+import com.app.webnest.domain.dto.FollowDTO;
+import com.app.webnest.domain.dto.PostResponseDTO;
 import com.app.webnest.domain.dto.UserResponseDTO;
 import com.app.webnest.domain.vo.UserInsertSocialVO;
 import com.app.webnest.domain.vo.UserSocialVO;
 import com.app.webnest.domain.vo.UserVO;
 import com.app.webnest.exception.UserException;
-import com.app.webnest.repository.UserDAO;
-import com.app.webnest.repository.UserSocialDAO;
+import com.app.webnest.repository.*;
 import com.app.webnest.util.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,6 +28,11 @@ public class UserServiceImpl implements UserService {
   private final PasswordEncoder passwordEncoder;
   private final JwtTokenUtil jwtTokenUtil;
   private final UserSocialDAO userSocialDAO;
+  private final PostDAO postDAO;
+  private final QuizDAO quizDAO;
+  private final FollowDAO followDAO;
+
+
 
   // 이메일 중복 조회
   @Override
@@ -166,4 +172,26 @@ public class UserServiceImpl implements UserService {
     userSocialDAO.delete(id);
     userDAO.delete(id);
   }
+
+    @Override
+    public Map<String, Object> getMyDatas(Long id) {
+        Map<String, Object> myDatas = new HashMap<>();
+
+        // 게시글
+        List<PostResponseDTO> questionPosts = postDAO.findQuestionPostsByUserId(id);
+        // 문제
+//        quizDAO
+        // 팔로워
+        List<FollowDTO> followers = followDAO.findFollowersByUserId(id);
+
+        // 팔로잉
+        List<FollowDTO> following = followDAO.findFollowingByUserId(id);
+
+        // 타이핑
+        myDatas.put("questionPosts", questionPosts);
+        myDatas.put("followers", followers);
+        myDatas.put("following", following);
+
+        return myDatas;
+    }
 }
