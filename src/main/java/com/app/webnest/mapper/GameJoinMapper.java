@@ -29,7 +29,7 @@ public interface GameJoinMapper {
     public List<GameJoinDTO> selectUserListByGameRoomId(Long gameRoomId);
     
     // 유저의 정보 가져온다. 1. 위치 정보, 2. 턴 정보
-    public Integer selectUserTurn(GameJoinVO gameJoinVO);
+    public Boolean selectUserTurn(GameJoinVO gameJoinVO);
     public Integer selectUserPosition(GameJoinVO gameJoinVO);
     
     // 선택한 유저의 정보를 수정한다. 위치 이동, 턴 변경

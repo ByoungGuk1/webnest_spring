@@ -24,7 +24,6 @@ public class GameJoinDTO {
     private String userNickname;
     private Integer userLevel;
     private Integer userExp;
-    private Integer gameJoinIsTurn;
     private Integer gameJoinPosition;
     private Integer gameJoinIsReady;
 }

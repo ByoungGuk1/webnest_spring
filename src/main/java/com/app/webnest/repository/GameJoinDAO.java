@@ -48,7 +48,7 @@ public class GameJoinDAO {
     }
     
     // 유저의 정보 가져온다. 1. 위치 정보, 2. 턴 정보
-    public Integer findUserTurn(GameJoinVO gameJoinVO) {
+    public Boolean findUserTurn(GameJoinVO gameJoinVO) {
         return gameJoinMapper.selectUserTurn(gameJoinVO);
     }
     public Integer findUserPosition(GameJoinVO gameJoinVO) {
