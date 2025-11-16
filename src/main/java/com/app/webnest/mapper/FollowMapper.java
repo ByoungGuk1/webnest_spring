@@ -23,8 +23,11 @@ public interface FollowMapper {
     void delete(Long id);
     
     // 팔로우 삭제 (VO로)
-    void deleteByUserAndFollower(FollowVO followVO);
-    
+    public void deleteByUserAndFollower(FollowVO followVO);
+
+    public List<FollowDTO> selectFollowingWithPresence(Long userId);
+
+
     // 팔로워 수 조회
     int selectFollower(Long followerId);
 }
