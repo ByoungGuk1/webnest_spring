@@ -24,5 +24,8 @@ public interface FollowMapper {
     
     // 팔로우 삭제 (VO로)
     void deleteByUserAndFollower(FollowVO followVO);
+    
+    // 팔로워 수 조회
+    int selectFollower(Long followerId);
 }
 
