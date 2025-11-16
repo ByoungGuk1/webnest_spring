@@ -1,5 +1,6 @@
 package com.app.webnest.repository;
 
+import com.app.webnest.domain.dto.GameJoinDTO;
 import com.app.webnest.domain.vo.UserVO;
 import com.app.webnest.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
@@ -65,6 +66,10 @@ public class UserDAO {
   // 회원 탈퇴
   public void delete(Long id){
     userMapper.delete(id);
+  }
+
+  public void updateUserEXPByGameResult(GameJoinDTO gameJoinDTO){
+      userMapper.updateUserEXPByGameResult(gameJoinDTO);
   }
 
 }

@@ -125,4 +125,10 @@
     WHERE ID = #{id}
     </delete>
 
+    <update id="updateUserEXPByGameResult" parameterType="GameJoinDTO">
+        UPDATE TBL_USER
+        SET USER_EXP = #{userEXP}
+        WHERE ID = #{id}
+    </update>
+
 </mapper>

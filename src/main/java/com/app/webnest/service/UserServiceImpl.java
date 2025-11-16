@@ -1,6 +1,7 @@
 package com.app.webnest.service;
 
 import com.app.webnest.domain.dto.FollowDTO;
+import com.app.webnest.domain.dto.GameJoinDTO;
 import com.app.webnest.domain.dto.PostResponseDTO;
 import com.app.webnest.domain.dto.UserResponseDTO;
 import com.app.webnest.domain.vo.UserInsertSocialVO;
@@ -196,5 +197,10 @@ public class UserServiceImpl implements UserService {
         myDatas.put("following", following);
 
         return myDatas;
+    }
+
+    @Override
+    public void modifyUserEXPByGameResult (GameJoinDTO gameJoinDTO) {
+      userDAO.updateUserEXPByGameResult(gameJoinDTO);
     }
 }

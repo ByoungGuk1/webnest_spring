@@ -43,4 +43,6 @@ public interface GameJoinService {
     public void update(GameJoinVO gameJoinVO);
 
     public Optional<GameJoinVO> getGameJoinDTOByGameRoomId(GameJoinVO gameJoinVO);
+
+    public List<GameJoinVO> getUserListByEntrancedTime(Long gameRoomId);
 }

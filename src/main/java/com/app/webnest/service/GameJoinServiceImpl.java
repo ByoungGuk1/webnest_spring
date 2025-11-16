@@ -68,23 +68,28 @@ public class GameJoinServiceImpl implements GameJoinService {
     public void updateUserTurn(GameJoinVO gameJoinVO) {
         gameJoinDAO.modifyUserTurn(gameJoinVO);
     }
-        @Override
-        public void updateAllUserTurn(Long gameRoomId){
-            gameJoinDAO.modifyAllTurn(gameRoomId);
-        }
+    @Override
+    public void updateAllUserTurn(Long gameRoomId){
+        gameJoinDAO.modifyAllTurn(gameRoomId);
+    }
 
-        @Override
-        public void resetAllPosition(Long gameRoomId) {
-            gameJoinDAO.resetAllPosition(gameRoomId);
-        }
+    @Override
+    public void resetAllPosition(Long gameRoomId) {
+        gameJoinDAO.resetAllPosition(gameRoomId);
+    }
 
-        @Override
-        public void resetAllReady(Long gameRoomId) {
-            gameJoinDAO.resetAllReady(gameRoomId);
-        }
+    @Override
+    public void resetAllReady(Long gameRoomId) {
+        gameJoinDAO.resetAllReady(gameRoomId);
+    }
 
-        @Override
-        public void updateReady(GameJoinVO gameJoinVO) {
+    @Override
+    public void updateReady(GameJoinVO gameJoinVO) {
             gameJoinDAO.updateReady(gameJoinVO);
         }
+
+    @Override
+    public List<GameJoinVO> getUserListByEntrancedTime(Long gameRoomId) {
+        return gameJoinDAO.findPlayerListByEntrancedTime(gameRoomId);
+    }
 }

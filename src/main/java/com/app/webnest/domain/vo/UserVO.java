@@ -1,5 +1,7 @@
 package com.app.webnest.domain.vo;
 
+import com.app.webnest.domain.dto.GameJoinDTO;
+import com.app.webnest.domain.dto.UserResponseDTO;
 import lombok.*;
 
 import java.util.Date;
@@ -39,5 +41,20 @@ public class UserVO {
     if (this.userProvider == null) this.userProvider = "local";
     if (this.userThumbnailName == null) this.userThumbnailName = "default.jpg";
     if (this.userThumbnailUrl == null) this.userThumbnailUrl = "/default";
+  }
+
+  public UserVO(UserResponseDTO userResponseDTO) {
+      this.id = userResponseDTO.getId();
+      this.userEmail = userResponseDTO.getUserEmail();
+      this.userThumbnailUrl = userResponseDTO.getUserThumbnailUrl();
+      this.userThumbnailName = userResponseDTO.getUserThumbnailName();
+      this.userName = userResponseDTO.getUserName() == null ? userResponseDTO.getUserNickname() : userResponseDTO.getUserName();
+      this.userNickname = userResponseDTO.getUserNickname() == null ? userResponseDTO.getUserName() : userResponseDTO.getUserNickname();
+      this.userProvider = userResponseDTO.getUserProvider();
+      this.userBirthday = userResponseDTO.getUserBirthday();
+      this.userPhone = userResponseDTO.getUserPhone();
+      if (this.userProvider == null) this.userProvider = "local";
+      if (this.userThumbnailName == null) this.userThumbnailName = "default.jpg";
+      if (this.userThumbnailUrl == null) this.userThumbnailUrl = "/default";
   }
 }

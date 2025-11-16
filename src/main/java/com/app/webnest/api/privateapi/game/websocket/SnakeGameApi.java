@@ -2,9 +2,12 @@ package com.app.webnest.api.privateapi.game.websocket;
 
 import com.app.webnest.domain.dto.GameJoinDTO;
 import com.app.webnest.domain.dto.GameRoomDTO;
+import com.app.webnest.domain.dto.UserResponseDTO;
 import com.app.webnest.domain.vo.GameJoinVO;
+import com.app.webnest.domain.vo.UserVO;
 import com.app.webnest.service.GameJoinService;
 import com.app.webnest.service.GameRoomService;
+import com.app.webnest.service.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -25,6 +28,7 @@ public class SnakeGameApi {
     private final GameJoinService gameJoinService;
     private final GameRoomService gameRoomService;
     private final SimpMessagingTemplate simpMessagingTemplate;
+    private final UserServiceImpl userService;
 
     /**
      * 준비 상태 업데이트
@@ -60,14 +64,9 @@ public class SnakeGameApi {
      */
     @MessageMapping("/game/snake/start")
     public void startGame(GameJoinVO gameJoinVO) {
-        log.info("Game start requested. gameRoomId: {}, userId: {}", 
-                gameJoinVO.getGameRoomId(), gameJoinVO.getUserId());
-        
+
         // 게임 시작 시 모든 플레이어를 자동으로 준비완료 상태로 변경
         List<GameJoinDTO> players = gameJoinService.getArrangeUserByTurn(gameJoinVO.getGameRoomId());
-        
-        log.info("Auto-setting all players to ready. Total players: {}, gameRoomId: {}", 
-                players.size(), gameJoinVO.getGameRoomId());
         
         // 모든 플레이어를 준비완료 상태로 변경
         for (GameJoinDTO player : players) {
@@ -76,7 +75,6 @@ public class SnakeGameApi {
             readyVO.setGameRoomId(gameJoinVO.getGameRoomId());
             readyVO.setGameJoinIsReady(1);
             gameJoinService.updateReady(readyVO);
-            log.info("Player auto-ready set. userId: {}", player.getUserId());
         }
         
         // 게임 시작 전 초기화 (안전장치)
@@ -85,15 +83,10 @@ public class SnakeGameApi {
         
         // 모든 턴을 0으로 설정
         gameJoinService.updateAllUserTurn(gameJoinVO.getGameRoomId());
-        log.info("All turns reset to 0. gameRoomId: {}", gameJoinVO.getGameRoomId());
-        
+
         // 게임 상태를 다시 조회하여 최신 상태 가져오기
         List<GameJoinDTO> currentPlayers = gameJoinService.getArrangeUserByTurn(gameJoinVO.getGameRoomId());
-        log.info("Current players count after reset: {}", currentPlayers.size());
-        currentPlayers.forEach(p -> {
-            log.info("Player before turn set - userId: {}, myTurn: {}", p.getUserId(), p.isGameJoinMyturn());
-        });
-        
+
         // 첫 번째 플레이어의 턴을 1로 설정
         if (!currentPlayers.isEmpty()) {
             GameJoinVO firstPlayerVO = new GameJoinVO();
@@ -142,9 +135,7 @@ public class SnakeGameApi {
      */
     @MessageMapping("/game/snake/roll-dice")
     public void rollDice(GameJoinVO gameJoinVO) {
-        log.info("Dice roll requested. gameRoomId: {}, userId: {}", 
-                gameJoinVO.getGameRoomId(), gameJoinVO.getUserId());
-        
+
         try {
         // ========== 비즈니스 로직 작성 영역 ==========
         
@@ -301,8 +292,6 @@ public class SnakeGameApi {
                  teamPlayerVO.setGameJoinPosition(newPosition);
                  gameJoinService.updateUserPosition(teamPlayerVO);
              }
-             log.info("Team position updated. teamColor: {}, newPosition: {}, teamSize: {}", 
-                     userTeamColor, newPosition, teamPlayers.size());
          } else {
              // 개인전: 개인 포지션만 업데이트
              gameJoinVO.setGameJoinPosition(newPosition);
@@ -311,12 +300,26 @@ public class SnakeGameApi {
         
         // 8. 게임 종료 체크 (100 이상이면 승리)
          boolean gameEnded = newPosition >= 100;
+            List<GameJoinDTO> currentPlayer = gameJoinService.getArrangeUserByTurn(gameJoinVO.getGameRoomId());
          if (gameEnded) {
-             log.info("Game ended! Winner: userId {}", gameJoinVO.getUserId());
-             gameJoinService.updateAllUserTurn(gameJoinVO.getGameRoomId()); // 모든 턴 종료
-             gameJoinService.resetAllPosition(gameJoinVO.getGameRoomId()); // 모든 포지션 0으로 초기화
-             gameJoinService.resetAllReady(gameJoinVO.getGameRoomId()); // 모든 레디 상태 0으로 초기화
-             // 경험치 추가 등 (추후 구현)
+            Long winnerId = gameJoinVO.getUserId();
+            UserResponseDTO winnerUser = userService.getUserById(winnerId);
+            UserVO winnerUserVO = new UserVO(winnerUser);
+            log.info("Game ended! Winner: userId {}", gameJoinVO.getUserId());
+            gameJoinService.updateAllUserTurn(gameJoinVO.getGameRoomId()); // 모든 턴 종료
+            gameJoinService.resetAllPosition(gameJoinVO.getGameRoomId()); // 모든 포지션 0으로 초기화
+            gameJoinService.resetAllReady(gameJoinVO.getGameRoomId()); // 모든 레디 상태 0으로 초기화
+            winnerUserVO.setUserExp(winnerUserVO.getUserExp() + 100);
+            userService.modify(winnerUserVO);
+                // 경험치 추가 등 (추후 구현)
+             List<GameJoinDTO> updateUserExp = currentPlayer.stream().map((player) ->{
+                 player.setUserExp(player.getUserExp() + 100);
+                 return player;
+             }).toList();
+             updateUserExp.forEach((player) -> {
+                 userService.modifyUserEXPByGameResult(player);
+             });
+
          }
         
         // 9. 더블 체크 및 턴 넘기기

@@ -49,4 +49,6 @@ public interface GameJoinMapper {
     public void updateReady(GameJoinVO gameJoinVO);
     
     public Optional<GameJoinVO> selectGameUserByUserIdAndGameRoom(GameJoinVO gameJoinVO);
+
+    public List<GameJoinVO> selectUserListOrderedEntrancedTime(Long gameRoomId);
 }
