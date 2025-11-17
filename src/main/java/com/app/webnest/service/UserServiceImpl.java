@@ -31,7 +31,6 @@ public class UserServiceImpl implements UserService {
   private final FollowDAO followDAO;
     private final PostLikeDAO postLikeDAO;
 
-
     // 이메일 중복 조회
   @Override
   public boolean existsByUserEmail(String userEmail) {
@@ -203,5 +202,10 @@ public class UserServiceImpl implements UserService {
         myDatas.put("following", following);
 
         return myDatas;
+    }
+
+    @Override
+    public void modifyUserEXPByGameResult (GameJoinDTO gameJoinDTO) {
+      userDAO.updateUserEXPByGameResult(gameJoinDTO);
     }
 }

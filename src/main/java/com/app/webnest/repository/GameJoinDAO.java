@@ -86,4 +86,8 @@ public class GameJoinDAO {
     public Optional<GameJoinVO> findUserInGameRoom(GameJoinVO gameJoinVO) {
         return gameJoinMapper.selectGameUserByUserIdAndGameRoom(gameJoinVO);
     }
+
+    public List<GameJoinVO> findPlayerListByEntrancedTime(Long gameRoomId) {
+        return gameJoinMapper.selectUserListOrderedEntrancedTime(gameRoomId);
+    }
 }

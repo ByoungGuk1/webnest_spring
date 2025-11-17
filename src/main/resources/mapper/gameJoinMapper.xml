@@ -13,6 +13,7 @@
         ON TBGJ.USER_ID = TBU.ID AND TBGJ.GAME_ROOM_ID = #{gameRoomId}
     </select>
 
+<!--    gameJoin 에 있는 유저 조회 -->
     <select id="selectGameUserByUserIdAndGameRoom" parameterType="GameJoinVO" resultType="GameJoinVO">
         SELECT ID, GAME_JOIN_IS_HOST, USER_ID ,GAME_ROOM_ID
         FROM TBL_GAME_JOIN
@@ -179,6 +180,19 @@
             ORDER BY ID DESC
         )
         WHERE ROWNUM = 1
+    </select>
+<!--    게임 나갈 때 방장이면 호스트 정보 바꿔 줌 -->
+    <update id="updateHostUser" parameterType="Long">
+        UPDATE TBL_GAME_JOIN
+        SET GAME_JOIN_IS_HOST = 0
+        WHERE USER_ID = #{userId}
+    </update>
+
+<!--    입장한 시간 순서대로 유저 리스트를 가져온다 (방 번호로 가져옴 ) -->
+    <select id="selectUserListOrderedEntrancedTime" parameterType="Long" resultType="GameJoinVO">
+        SELECT ID, GAME_JOIN_IS_HOST, USER_ID, GAME_ROOM_ID
+        FROM TBL_GAME_JOIN
+        WHERE GAME_ROOM_ID = #{gameRoomId}
     </select>
 
 </mapper>

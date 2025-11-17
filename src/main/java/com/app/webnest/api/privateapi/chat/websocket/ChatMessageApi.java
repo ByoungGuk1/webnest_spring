@@ -1,16 +1,20 @@
 package com.app.webnest.api.privateapi.chat.websocket;
 
 import com.app.webnest.domain.dto.ChatMessageDTO;
+import com.app.webnest.domain.dto.GameJoinDTO;
 import com.app.webnest.domain.vo.ChatMessageVO;
 import com.app.webnest.domain.vo.GameJoinVO;
+import com.app.webnest.exception.GameJoinException;
 import com.app.webnest.service.ChatMessageService;
 import com.app.webnest.service.GameJoinService;
+import com.app.webnest.service.GameRoomServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -21,6 +25,7 @@ public class ChatMessageApi {
     private final ChatMessageService chatMessageService;
     private final GameJoinService gameJoinService;
     private final SimpMessagingTemplate simpMessagingTemplate;
+    private final GameRoomServiceImpl gameRoomServiceImpl;
 
     @MessageMapping("/chats/send")
     public void sendMessage(ChatMessageVO chatMessageVO) {
@@ -78,8 +83,26 @@ public class ChatMessageApi {
                             existing.getUserId(), existing.getGameRoomId());
                 }
             }
+//            게임방 퇴장 로직
         }else if(type.equals("LEAVE")){
-            gameJoinService.leave(gameJoinVO);
+            List<GameJoinVO> foundPlayers = gameJoinService.getUserListByEntrancedTime(gameJoinVO.getGameRoomId());
+           int currentUserIndex = foundPlayers.indexOf(gameJoinVO);
+           GameJoinVO nextUser = foundPlayers.get(currentUserIndex + 1);
+            GameJoinVO currentUser = gameJoinService.getGameJoinDTOByGameRoomId(gameJoinVO).orElseThrow(() ->{throw new GameJoinException("유저를 찾을 수 없습니다.");
+            });
+            Long currentRoomId = gameJoinVO.getGameRoomId();
+//            혼자 남은 유저가 나간 경우 -> 방 폭파
+            if(foundPlayers.size() == 1){
+//                만약에 여기서 오류나면 그거임 방 먼저 삭제 -> 키 이슈 --> 리브부터 처리 후 딜리트
+                gameJoinService.leave(gameJoinVO);
+                gameRoomServiceImpl.delete(currentRoomId);
+            }else {
+                if(currentUser.getGameJoinIsHost() != null && currentUser.getGameJoinIsHost() == 1) {
+                    nextUser.setGameJoinIsHost(1);
+                    gameJoinService.update(nextUser);
+                }
+                gameJoinService.leave(gameJoinVO);
+            }
         }else if(type.equals("MESSAGE")){
             // MESSAGE 전에 TBL_GAME_JOIN에 팀 컬러가 있는지 확인
             if(alreadyExistUserInRoom) {

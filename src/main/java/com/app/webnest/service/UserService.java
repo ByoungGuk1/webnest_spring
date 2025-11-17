@@ -1,5 +1,6 @@
 package com.app.webnest.service;
 
+import com.app.webnest.domain.dto.GameJoinDTO;
 import com.app.webnest.domain.dto.UserResponseDTO;
 import com.app.webnest.domain.vo.UserInsertSocialVO;
 import com.app.webnest.domain.vo.UserSocialVO;
@@ -39,5 +40,7 @@ public interface UserService {
 
   // 회원 탈퇴
   public void withdraw(Long id);
+
+  public void modifyUserEXPByGameResult(GameJoinDTO gameJoinDTO);
 
 }

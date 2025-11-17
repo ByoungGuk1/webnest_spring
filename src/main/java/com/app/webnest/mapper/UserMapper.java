@@ -1,5 +1,6 @@
 package com.app.webnest.mapper;
 
+import com.app.webnest.domain.dto.GameJoinDTO;
 import com.app.webnest.domain.vo.UserInsertSocialVO;
 import com.app.webnest.domain.vo.UserVO;
 import org.apache.catalina.User;
@@ -48,4 +49,6 @@ public interface UserMapper {
 
   // 회원 탈퇴
   public void delete(Long id);
+
+  public void updateUserEXPByGameResult(GameJoinDTO gameJoinDTO);
 }
