@@ -3,6 +3,7 @@ package com.app.webnest.mapper;
 import com.app.webnest.domain.dto.CommentDTO;
 import com.app.webnest.domain.vo.CommentVO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -25,6 +26,6 @@ public interface CommentMapper {
     public void deleteComment(Long id);
 
     //채택
-    public void acceptComment(Long commentId);
+    public void acceptComment(@Param("commentId") Long commentId);
 
 }
