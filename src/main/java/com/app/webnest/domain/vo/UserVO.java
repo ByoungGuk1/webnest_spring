@@ -25,7 +25,7 @@ public class UserVO {
   {
     if (this.userProvider == null) this.userProvider = "local";
     if (this.userThumbnailName == null) this.userThumbnailName = "default.jpg";
-    if (this.userThumbnailUrl == null) this.userThumbnailUrl = "/default";
+    if (this.userThumbnailUrl == null) this.userThumbnailUrl = "/default/";
   }
 
   public UserVO(UserInsertSocialVO userInsertSocialVO) {
@@ -40,7 +40,7 @@ public class UserVO {
     this.userPhone = userInsertSocialVO.getUserPhone();
     if (this.userProvider == null) this.userProvider = "local";
     if (this.userThumbnailName == null) this.userThumbnailName = "default.jpg";
-    if (this.userThumbnailUrl == null) this.userThumbnailUrl = "/default";
+    if (this.userThumbnailUrl == null) this.userThumbnailUrl = "/default/";
   }
 
   public UserVO(UserResponseDTO userResponseDTO) {
@@ -55,6 +55,6 @@ public class UserVO {
       this.userPhone = userResponseDTO.getUserPhone();
       if (this.userProvider == null) this.userProvider = "local";
       if (this.userThumbnailName == null) this.userThumbnailName = "default.jpg";
-      if (this.userThumbnailUrl == null) this.userThumbnailUrl = "/default";
+      if (this.userThumbnailUrl == null) this.userThumbnailUrl = "/default/";
   }
 }

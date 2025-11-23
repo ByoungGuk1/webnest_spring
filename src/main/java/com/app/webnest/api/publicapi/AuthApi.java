@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequiredArgsConstructor
@@ -26,29 +28,40 @@ public class AuthApi {
   private final RedisTemplate redisTemplate;
   private final SmsService smsService;
 
-  // 로그인
-  @PostMapping("login")
-  public ResponseEntity<ApiResponseDTO> login(@RequestBody UserVO userVO){
-    Map<String, String> tokens = authService.login(userVO);
+    // 로그인
+    @PostMapping("login")
+    public ResponseEntity<ApiResponseDTO> login(@RequestBody UserVO userVO){
+        Map<String, String> tokens = authService.login(userVO);
 
-    // refreshToken은 cookie로 전달
-    // cookie: 웹 브라우저로 전송하는 단순한 문자열(세션, refreshToken)
-    // XSS 탈취 위험을 방지하기 위해서 http Only로 안전하게 처리한다. 즉, JS로 접근할 수 없다.
-    String refreshToken = tokens.get("refreshToken");
-    ResponseCookie cookie = ResponseCookie.from("refreshToken",  refreshToken)
-      .httpOnly(true) // *필수
-//      .secure(true) // https에서 사용
-      .path("/") // 모든 경로에 쿠키 전송 사용
-      .maxAge(60 * 60 * 24 * 7)
-      .build();
+        // refreshToken은 cookie로 전달
+        // cookie: 웹 브라우저로 전송하는 단순한 문자열(세션, refreshToken)
+        // XSS 탈취 위험을 방지하기 위해서 http Only로 안전하게 처리한다. 즉, JS로 접근할 수 없다.
+        String refreshToken = tokens.get("refreshToken");
+        ResponseCookie cookie = ResponseCookie.from("refreshToken",  refreshToken)
+                .httpOnly(true) // *필수
+    //      .secure(true) // https에서 사용
+                .path("/") // 모든 경로에 쿠키 전송 사용
+                .maxAge(60 * 60 * 24 * 7)
+                .build();
 
-    tokens.remove("refreshToken");
-    // accessToken은 그대로 발급
-    return ResponseEntity
-      .status(HttpStatus.OK)
-      .header(HttpHeaders.SET_COOKIE, cookie.toString()) // 브라우저에 쿠키를 심는다.
-      .body(ApiResponseDTO.of("로그인이 성공했습니다", tokens));
-  }
+        tokens.remove("refreshToken");
+
+        // 5. redis로 교환하기 위한 key를 등록
+        String key = UUID.randomUUID().toString();
+        redisTemplate.opsForHash().putAll(key, tokens);
+        redisTemplate.expire(key, 5, TimeUnit.MINUTES);
+
+        // 6. redis에 refresh 토큰을 등록 (검증)
+        TokenDTO tokenDTO = new TokenDTO();
+        tokenDTO.setUserId(userVO.getId());
+        tokenDTO.setRefreshToken(refreshToken);
+        authService.saveRefreshToken(tokenDTO);
+
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .header(HttpHeaders.SET_COOKIE, cookie.toString()) // 브라우저에 쿠키를 심는다.
+            .body(ApiResponseDTO.of("로그인이 성공했습니다", tokens));
+    }
 
   // 토큰 재발급
   @PostMapping("refresh")
