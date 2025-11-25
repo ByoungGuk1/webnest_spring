@@ -203,9 +203,7 @@ public class SnakeGameApi {
              );
              return;
          }
-         
-         log.info("주사위 굴리기 - userId: {}, dice1: {}, dice2: {}", gameJoinVO.getUserId(), dice1, dice2);
-        
+
         // 5. 새 포지션 계산
          int newPosition = currentPosition + dice1 + dice2;
         

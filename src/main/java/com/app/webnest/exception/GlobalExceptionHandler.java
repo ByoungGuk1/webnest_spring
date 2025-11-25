@@ -42,6 +42,10 @@ public class GlobalExceptionHandler {
   public ResponseEntity<ApiResponseDTO> handleWordAiException(WordAiException e) {
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ApiResponseDTO.of(e.getMessage()));
   }
+  @ExceptionHandler(RoomException.class)
+  public ResponseEntity<ApiResponseDTO> handleRoomException(WordAiException e) {
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ApiResponseDTO.of(e.getMessage()));
+  }
 
   @ExceptionHandler(LastWordException.class)
   public ResponseEntity<ApiResponseDTO> handleLastWordException(LastWordException e) {

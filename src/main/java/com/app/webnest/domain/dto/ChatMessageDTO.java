@@ -13,10 +13,12 @@ public class ChatMessageDTO {
     private String userSenderTeamcolor;   // 🔁 통일: teamcolor
     private String receiverTeamcolor;     // 🔁 필요하면 활용
     private String senderThumbnailUrl;
+    private String senderThumbnailName;
     private Integer senderLevel;
     private Long userReceiverId;
     private String receiverNickname;
     private String receiverThumbnailUrl;
+    private String receiverThumbnailName;
     private Integer receiverLevel;
     private String chatMessageContent;
     private String chatMessageType;
