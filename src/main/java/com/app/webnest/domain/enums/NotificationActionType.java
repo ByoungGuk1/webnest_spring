@@ -1,8 +1,5 @@
 package com.app.webnest.domain.enums;
 
-/**
- * 알림 액션 타입 Enum
- */
 public enum NotificationActionType {
     NEW_LIKE("New Like"),      // 좋아요
     COMMENT("COMMENT"),        // 댓글
@@ -18,9 +15,6 @@ public enum NotificationActionType {
         return value;
     }
     
-    /**
-     * 문자열 값으로 enum 찾기
-     */
     public static NotificationActionType fromValue(String value) {
         if (value == null) {
             return null;

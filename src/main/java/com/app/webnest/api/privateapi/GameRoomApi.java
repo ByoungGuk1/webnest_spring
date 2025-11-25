@@ -36,7 +36,6 @@ public class GameRoomApi {
 
     @GetMapping("")
     public ResponseEntity<ApiResponseDTO<Map<String, Object>>> getRooms(@RequestParam Long userId) {
-        log.info("게임방 목록 조회 요청 - userId: {}", userId);
         List<GameRoomDTO> rooms = gameRoomService.getRooms(userId);
         Integer winCount = winningStreakService.getWinCountByUserId(userId);
         List<FollowDTO> following = followService.getFollowWithStatus(userId);
@@ -52,12 +51,10 @@ public class GameRoomApi {
 
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponseDTO<GameRoomDTO>> getRoom(@PathVariable Long id) {
-        log.info("게임방 단일 조회 요청 - id: {}", id);
         try {
             GameRoomDTO room = gameRoomService.getRoom(id);
             return ResponseEntity.status(HttpStatus.OK).body(ApiResponseDTO.of("게임방 조회 성공", room));
         } catch (Exception e) {
-            log.error("게임방 조회 실패 - id: {}, error: {}", id, e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(ApiResponseDTO.of("게임방을 찾을 수 없습니다. ID: " + id, null));
         }
@@ -95,8 +92,6 @@ public class GameRoomApi {
         }
         Long userId = userService.getUserIdByUserEmail(email);
         
-        // GameRoomVO 파싱
-        @SuppressWarnings("unchecked")
         Map<String, Object> roomData = (Map<String, Object>) request.get("gameRoomVO");
         
         GameRoomVO gameRoomVO = new GameRoomVO();
@@ -110,10 +105,8 @@ public class GameRoomApi {
         if (roomData.get("gameRoomLanguage") != null) gameRoomVO.setGameRoomLanguage(roomData.get("gameRoomLanguage").toString());
         if (roomData.get("gameRoomDifficult") != null) gameRoomVO.setGameRoomDifficult(Integer.valueOf(roomData.get("gameRoomDifficult").toString()));
         
-        // 생성 시간 자동 설정
         gameRoomVO.setGameRoomCreateAt(LocalDateTime.now());
         
-        // 게임방 생성과 호스트 추가를 한 트랜잭션에서 처리 (생성된 게임방 DTO 반환)
         GameRoomDTO createdRoom = gameRoomService.createRoomWithHost(gameRoomVO, userId);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponseDTO.of("게임방 생성 성공", createdRoom));

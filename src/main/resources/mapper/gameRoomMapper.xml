@@ -31,11 +31,11 @@
         <selectKey keyProperty="id" resultType="Long" order="BEFORE">
             SELECT SEQ_GAME_ROOM.NEXTVAL FROM DUAL
         </selectKey>
-        INSERT INTO TBL_GAME_ROOM(ID, GAME_ROOM_TITLE, GAME_ROOM_IS_TEAM, GAME_ROOM_TYPE, GAME_ROOM_IS_OPEN, GAME_ROOM_MAX_PLAYER, GAME_ROOM_IS_START, GAME_ROOM_PASS_KEY, GAME_ROOM_CREATE_AT, GAME_ROOM_LANGUAGE, GAME_ROOM_DIFFICULT)
-        VALUES (#{id}, #{gameRoomTitle}, #{gameRoomIsTeam}, #{gameRoomType}, #{gameRoomIsOpen}, #{gameRoomMaxPlayer}, #{gameRoomIsStart}, #{gameRoomPassKey}, #{gameRoomCreateAt}, #{gameRoomLanguage}, #{gameRoomDifficult})
+        INSERT INTO TBL_GAME_ROOM(ID, GAME_ROOM_TITLE, GAME_ROOM_IS_TEAM, GAME_ROOM_TYPE, GAME_ROOM_IS_OPEN, GAME_ROOM_MAX_PLAYER,
+            GAME_ROOM_IS_START, GAME_ROOM_PASS_KEY, GAME_ROOM_CREATE_AT, GAME_ROOM_LANGUAGE, GAME_ROOM_DIFFICULT)
+        VALUES (#{id}, #{gameRoomTitle}, #{gameRoomIsTeam}, #{gameRoomType}, #{gameRoomIsOpen}, #{gameRoomMaxPlayer},
+            #{gameRoomIsStart}, #{gameRoomPassKey}, #{gameRoomCreateAt}, #{gameRoomLanguage}, #{gameRoomDifficult})
     </insert>
-    <!-- 채팅방 추가 -->
-    <!-- 채팅방 삭제 -->
     <delete id="delete" parameterType="Long">
         DELETE FROM TBL_GAME_ROOM
         WHERE ID = #{id}
